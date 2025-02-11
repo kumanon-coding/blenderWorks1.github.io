@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blender作品集</title>
+  <!-- jQueryの読み込み -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/Modaal/0.4.4/css/modaal.min.css">
+  <style>
+    html{/*new*/
+      font-size:100%;
+      font-family: YuGothic,'Yu Gothic','Hiragino Kaku Gothic ProN','ヒラギノ角ゴ ProN W3','ヒラギノ角ゴシック','Hiragino Sans',sans-serif;
+    }
+    *{
+      margin:0;
+      font-size:0;
+    }
+    /* top */
+    #top{
+      overflow: hidden;
+      position: relative;
+    }
+    #top h1{
+      font-size:20vw;
+      position: absolute;
+      margin-top:0vw;
+      top:10vw;
+      left:5vw;
+      color:rgba(255,255,255,0.7);
+      z-index: 1;
+    }
+    #top p{
+      font-size:5vw;
+      font-weight: 900;
+      position: absolute;
+      top:33vw;
+      left:30vw;
+      color:rgba(255,255,255,0.7);
+      z-index: 1;
+    }
+    #top img{
+      width: 100%;
+      object-fit: cover;
+    }
+    /* works */
+    #works{
+      background: #e6e6fa;
+      width: 100%;
+      overflow: hidden;
+    }
+    #works h2{ /* new */
+      font-size: 3vw;
+      position: relative;
+      width: 25%;
+      background: #ffc14b;
+      box-shadow: 0px 0px 0px 5px #ffc14b;
+      border: dashed 2px white;
+      text-align: center;
+      padding: 0.2em 0.5em;
+      margin:5% auto;
+      color: #ffffff;
+    }
+    #works h2:after{ /* new */
+      position: absolute;
+      content: '';
+      left: -7px;
+      top: -7px;
+      border-width: 0 0 30px 30px;
+      border-style: solid;
+      border-color: #e6e6fa #e6e6fa #f3b030;
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+    }
+    .worksTumbs{ /* new */
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .tumb{
+      opacity: 0;
+      width:30%;
+      margin:0% 1.5% 5%;
+      border-radius: 10px;
+      box-shadow: 5px 10px 15px #b0c4de;
+    }
+    .tumb img{
+      border-radius: 10px;
+    }
+    /* profile */
+    .profile{
+      width:100%;
+      background:#778899;
+    }
+    .profile ul li {
+      padding:2% 0% 0%;
+      text-align: left;
+      color:#ffffff;
+      list-style:none;
+    }
+    .profile ul li p,.profile ul li a{
+      font-size:1rem;
+      text-decoration: none;
+    }
+    /* アニメーション */
+    .fadeIn{
+      animation-name:FADEIN;
+      animation-delay: 0.5s;
+      animation-duration: 3s;
+      animation-fill-mode: forwards;
+      opacity: 0;
+    }
+    @keyframes FADEIN{
+      0%{
+        opacity:0;
+        transform: translateY(20px);
+      }
+      100%{
+        opacity:1;
+        transform: translateY(0px);
+      }
+    }
+    /* new */
+    .fadeUp {
+      animation-name:fadeUpAnime;
+      animation-duration:1.0s;
+      animation-delay: 0.5s;
+      animation-fill-mode:forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeUpAnime{
+      from {
+        opacity: 0;
+        transform: translateY(100px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* レスポンシブ対応 */
+    @media(max-width : 800px) {
+      .worksTumbs{ /* new */
+        margin-bottom:5%;
+      }
+      #works h2{ /* new */
+        font-size: 5vw;
+        width: 50%;
+        margin: 10% auto;
+      }
+      .tumb{
+        margin:5% auto;
+        width:80%;
+      }
+      .tumb:first-child{
+        margin-top:0%;
+      }
+      .scrolldown2{
+        display:none;
+      }
+    }
+    /* スクロールダウン */
+    /*スクロールダウン全体の場所*/
+.scrolldown2{
+    /*描画位置※位置は適宜調整してください*/
+	position:absolute;
+	bottom:10vw;
+	left:50%;
+}
+
+/*Scrollテキストの描写*/
+.scrolldown2 span{
+    /*描画位置*/
+	position: absolute;
+	left:10px;
+	bottom:10px;
+    /*テキストの形状*/
+	color: #eee;
+	font-size: 0.7rem;
+	letter-spacing: 0.05em;
+	/*縦書き設定*/
+	-ms-writing-mode: tb-rl;
+    -webkit-writing-mode: vertical-rl;
+    writing-mode: vertical-rl;
+}
+
+/* 丸の描写 */
+.scrolldown2:before {
+    content: "";
+    /*描画位置*/
+    position: absolute;
+    bottom:0;
+    left:-4px;
+    /*丸の形状*/
+    width:10px;
+    height:10px;
+    border-radius: 50%;
+    background:#eee;
+      /*丸の動き1.6秒かけて透過し、永遠にループ*/
+    animation:
+      circlemove 1.6s ease-in-out infinite,
+      cirlemovehide 1.6s ease-out infinite;
+  }
+
+  /*下からの距離が変化して丸の全体が上から下に動く*/
+  @keyframes circlemove{
+        0%{bottom:45px;}
+      100%{bottom:-5px;}
+  }
+
+  /*上から下にかけて丸が透過→不透明→透過する*/
+  @keyframes cirlemovehide{
+        0%{opacity:0}
+      50%{opacity:1;}
+      80%{opacity:0.9;}
+    100%{opacity:0;}
+  }
+
+  /* 線の描写 */
+  .scrolldown2:after{
+    content:"";
+    /*描画位置*/
+    position: absolute;
+    bottom:0;
+    left:0;
+    /*線の形状*/
+    width:2px;
+    height: 50px;
+    background:#eee;
+  }
+  </style>
+</head>
+<body>
+  <div id="top">
+    <h1 class="fadeIn">Portfolio</h1>
+    <p class="fadeIn">Blender Works</p>
+    <div class="scrolldown2"><span>Scroll</span></div>
+    <img src="./img/1.png" width="100%" alt="トップ画像">
+  </div>
+  <div id="works">
+    <h2>works</h2>
+    <div class="worksTumbs delayScroll">
+      <div class="tumb">
+        <a href="./img/1.png" class="gallery" data-group="gallery">
+          <img src="./img/1.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/2.png" class="gallery" data-group="gallery">
+          <img src="./img/2.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/3.png" class="gallery" data-group="gallery">
+          <img src="./img/3.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/4.png" class="gallery" data-group="gallery">
+          <img src="./img/4.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/5.png" class="gallery" data-group="gallery">
+          <img src="./img/5.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/6.png" class="gallery" data-group="gallery">
+          <img src="./img/6.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/7.png" class="gallery" data-group="gallery">
+          <img src="./img/7.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/8.png" class="gallery" data-group="gallery">
+          <img src="./img/8.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/9.png" class="gallery" data-group="gallery">
+          <img src="./img/9.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/10.png" class="gallery" data-group="gallery">
+          <img src="./img/10.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/11.png" class="gallery" data-group="gallery">
+          <img src="./img/11.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/12.png" class="gallery" data-group="gallery">
+          <img src="./img/12.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/13.png" class="gallery" data-group="gallery">
+          <img src="./img/13.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/14.png" class="gallery" data-group="gallery">
+          <img src="./img/14.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/15.png" class="gallery" data-group="gallery">
+          <img src="./img/15.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/16.png" class="gallery" data-group="gallery">
+          <img src="./img/16.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/17.png" class="gallery" data-group="gallery">
+          <img src="./img/17.png" width="100%" alt="">
+        </a>
+      </div>
+      <div class="tumb">
+        <a href="./img/18.png" class="gallery" data-group="gallery">
+          <img src="./img/18.png" width="100%" alt="">
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="profile">
+    <ul class="prf-list">
+      <li>
+        <p>制作者:熊野雄大</p>
+      </li>
+      <li>
+        <p>
+          お仕事のバナー制作時にBlenderを使用する機会があり、そこからチュートリアルの動画を参考にモデリングを始めました。<br>
+          最近はモデリングしたものを3Dプリンターで出力したりもしています。<br>
+          <a href="https://www.youtube.com/c/Mdesign_blender">参考にしているチュートリアル動画 : Mdesign</a>
+        </p>
+      </li>
+    </ul>
+  </div>
+  <!-- new -->
+  <script>
+    function delayScrollAnime() {
+        var time = 0.2;//遅延時間を増やす秒数の値
+        var value = time;
+        $('.delayScroll').each(function () {
+          var parent = this;					//親要素を取得
+          var elemPos = $(this).offset().top;//要素の位置まで来たら
+          var scroll = $(window).scrollTop();//スクロール値を取得
+          var windowHeight = $(window).height();//画面の高さを取得
+          var childs = $(this).children();	//子要素を取得
+
+          if (scroll >= elemPos - windowHeight && !$(parent).hasClass("play")) {//指定領域内にスクロールが入ったらまた親要素にクラスplayがなければ
+            $(childs).each(function () {
+
+              if (!$(this).hasClass("fadeUp")) {//アニメーションのクラス名が指定されているかどうかをチェック
+
+                $(parent).addClass("play");	//親要素にクラス名playを追加
+                $(this).css("animation-delay", value + "s");//アニメーション遅延のCSS animation-delayを追加し
+                $(this).addClass("fadeUp");//アニメーションのクラス名を追加
+                value = value + time;//delay時間を増加させる
+
+                //全ての処理を終わったらplayを外す
+                var index = $(childs).index(this);
+                if ((childs.length - 1) == index) {
+                  $(parent).removeClass("play");
+                }
+              }
+            })
+          } else {
+            $(childs).removeClass("fadeUp");//アニメーションのクラス名を削除
+            value = time;//delay初期値の数値に戻す
+          }
+        })
+      }
+
+      // 画面をスクロールをしたら動かしたい場合の記述
+      $(window).scroll(function () {
+        delayScrollAnime();/* アニメーション用の関数を呼ぶ*/
+      });// ここまで画面をスクロールをしたら動かしたい場合の記述
+
+      // 画面が読み込まれたらすぐに動かしたい場合の記述
+      $(window).on('load', function () {
+        delayScrollAnime();/* アニメーション用の関数を呼ぶ*/
+      });// ここまで画面が読み込まれたらすぐに動かしたい場合の記述
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Modaal/0.4.4/js/modaal.min.js"></script>
+  <script>
+    //画像のモーダル
+    $(".gallery").modaal({
+      type:'image',
+      overlay_close:true,
+      before_open:function(){
+        $("html").css('overflow-y','hidden');//縦スクロールバーを隠す
+      },
+      after_close:function(){
+        $("html").css('overflow-y','scroll');//縦スクロールバーを出す
+      }
+    });
+  </script>
+</body>
+</html>
